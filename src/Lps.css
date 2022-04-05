@@ -1,6 +1,33 @@
-.characterRow {
+.character-row {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
+}
+
+.letter-container {
+  width: 20px;
+  display: flex;
+  flex-direction: column;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 3px;
+  border-color: green;
+  align-items: center;
+  justify-content: center;
+  margin-right: 4px;
+}
+
+.visible-bar {
+  width: 10px;
+  height: 4px;
+  margin-bottom: 3px;
+  background-color: blue;
+}
+
+.invisible-bar {
+  width: 10px;
+  height: 5px;
+  background-color: blue;
+  opacity: 0;
 }

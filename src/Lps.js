@@ -99,18 +99,26 @@ export default class Lps extends Component {
   }
 
   displayArrays = () => {
-    let characters = this.state.characters;
-    let booleans = this.state.booleans;
     let divs = [];
-    for (let i = 0; i < characters.length; i++) {
+    for (let i = 0; i < this.state.characters.length; i++) {
+      let boolean = this.state.booleans[i];
       divs.push(
-        <div key={i}>
-          <div>{characters[i]}</div>
-          <div>{booleans[i]}</div>
+        <div key={i} className='letter-container'>
+          <div>{this.state.characters[i]}</div>
+          {this.displayUnderline(boolean)}
         </div>
       )
     }
     return divs;
+  }
+
+  displayUnderline = (boolean) => {
+    if (boolean) {
+      return <div className='visible-bar'></div>
+    }
+    else {
+      return <div className='visible-bar'></div>
+    }
   }
 
 
@@ -122,7 +130,7 @@ export default class Lps extends Component {
         <input onChange={this.changeWord} type={"text"} ></input>
         <button onClick={this.getWord} style={{ display: "block" }}>Get Longest Palindrome</button>
         <div>{this.state.longestPalindromicSubstring}</div>
-        <div className='characterRow'>
+        <div className='character-row'>
           {this.displayArrays()}
         </div>
       </div>
