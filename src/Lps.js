@@ -6,17 +6,17 @@ export default class Lps extends Component {
     super(props)
     this.state = {
       word: "",
-      displayWord: false,
       characters: [],
       booleans: [],
       longestPalindromicSubstring: "",
     }
     this.changeWord = this.changeWord.bind(this);
     this.getWord = this.getWord.bind(this);
-    this.setDisplayWordTrue = this.setDisplayWordTrue.bind(this);
     this.addCharacter = this.addCharacter.bind(this);
     this.resetBooleans = this.resetBooleans.bind(this);
     this.displayArrays = this.displayArrays.bind(this);
+    this.activateUnderline = this.activateUnderline.bind(this);
+    this.deactivateUnderline = this.deactivateUnderline.bind(this);
   }
 
   changeWord = (e) => {
@@ -31,7 +31,7 @@ export default class Lps extends Component {
     arr[word.length - 1] = false;
     this.setState({
       characters: [...word],
-      booleans: arr,
+      booleans: [...arr],
     });
   }
 
@@ -41,17 +41,54 @@ export default class Lps extends Component {
     });
   }
 
+  activateUnderline = (positions) => {
+    let bools = [];
+    bools[this.state.booleans.length - 1] = false;
+    for (let p of positions) {
+      bools[p] = true;
+    }
+    this.setState({
+      booleans: [...bools],
+    })
+    this.forceUpdate();
+  }
+
+  deactivateUnderline = () => {
+    let falseBools = [];
+    falseBools[this.state.booleans.length - 1] = false;
+    this.setState({
+      booleans: [...falseBools],
+    })
+    this.forceUpdate();
+  }
+
+  wait = () => {
+    const date = Date.now();
+    let currentDate = null;
+    do {
+      currentDate = Date.now();
+    } while (currentDate - date < 0);
+  }
+
+
+
   getWord = () => {
     let word = this.state.word;
     let palindromeMap = new Map();
     this.resetBooleans();
     this.addCharacter(word);
     for (let i = 0; i < word.length; i++) {
+
       let onePosition = i + "/" + i;
+      this.activateUnderline([i]);
+      this.deactivateUnderline();
       palindromeMap.set(onePosition, true);
       if (i < word.length - 1) {
         let twoPositions = i + "/" + (i + 1);
         palindromeMap.set(twoPositions, word.charAt(i) == word.charAt(i + 1));
+        this.activateUnderline([i, i + 1]);
+        this.wait();
+        this.deactivateUnderline();
       }
     }
     for (let i = 2; i < word.length; i++) {
@@ -61,6 +98,9 @@ export default class Lps extends Component {
         let twoPositions = start + "/" + end;
         let innerPositions = (start + 1) + "/" + (end - 1);
         palindromeMap.set(twoPositions, (word.charAt(start) == word.charAt(end)) && palindromeMap.get(innerPositions));
+        this.activateUnderline([i, j]);
+        this.wait();
+        this.deactivateUnderline();
       }
     }
     let start = 999999999;
@@ -82,20 +122,12 @@ export default class Lps extends Component {
       this.setState({
         longestPalindromicSubstring: word.substring(start, end + 1),
       });
-      console.log(word.substring(start, end + 1));
     }
     else {
       this.setState({
         longestPalindromicSubstring: word.substring(start),
       });
-      console.log(word.substring(start));
     }
-  }
-
-  setDisplayWordTrue = () => {
-    this.setState({
-      displayWord: true,
-    });
   }
 
   displayArrays = () => {
@@ -117,7 +149,7 @@ export default class Lps extends Component {
       return <div className='visible-bar'></div>
     }
     else {
-      return <div className='visible-bar'></div>
+      return <div className='invisible-bar'></div>
     }
   }
 
